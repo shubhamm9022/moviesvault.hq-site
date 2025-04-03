@@ -1,3 +1,16 @@
+// Ensure Supabase SDK is loaded first
+if (typeof supabase === "undefined") {
+    console.error("Supabase SDK not loaded!");
+} else {
+    console.log("✅ Supabase SDK Loaded");
+}
+
+// Initialize Supabase
+const supabaseUrl = "https://riwgagiilkmudczczfuw.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd2dhZ2lpbGttdWRjemN6ZnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1NjYwODksImV4cCI6MjA1OTE0MjA4OX0.0_lciZODhjlzF_tSCLX7egMVodXhDTDU7jK6TphuQUk"; // Replace with actual key
+const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+console.log("✅ Supabase Initialized:", supabase);
 // Load Supabase
 const supabaseUrl = "https://riwgagiilkmudczczfuw.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd2dhZ2lpbGttdWRjemN6ZnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1NjYwODksImV4cCI6MjA1OTE0MjA4OX0.0_lciZODhjlzF_tSCLX7egMVodXhDTDU7jK6TphuQUk"; // Don't expose publicly in production
