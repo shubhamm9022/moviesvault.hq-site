@@ -2,12 +2,23 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+   <!-- Load Supabase JS before using it -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
     // Initialize Supabase
     const supabaseUrl = "https://riwgagiilkmudczczfuw.supabase.co";
     const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd2dhZ2lpbGttdWRjemN6ZnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1NjYwODksImV4cCI6MjA1OTE0MjA4OX0.0_lciZODhjlzF_tSCLX7egMVodXhDTDU7jK6TphuQUk";
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    
+    // Ensure Supabase library is loaded before calling createClient
+    if (window.supabase) {
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        console.log("✅ Supabase Initialized:", supabase);
+    } else {
+        console.error("❌ Supabase JS library failed to load.");
+    }
+</script>
 
-    console.log("✅ Supabase Initialized:", supabase);
 
     // Fetch movies
     async function fetchMovies() {
