@@ -33,32 +33,32 @@
         displayMovies(data);
     }
 
-    // Display movies
-    function displayMovies(movies) {
-        const movieList = document.getElementById("movie-list");
-        movieList.innerHTML = "";
+function displayMovies(movies) {
+    const movieList = document.getElementById("movie-list");
+    movieList.innerHTML = "";
 
-        if (movies.length === 0) {
-            movieList.innerHTML = "<p>No movies found.</p>";
-            return;
-        }
-
-        movies.forEach((movie) => {
-            const movieSlug = movie.title.replace(/\s+/g, '-').toLowerCase();
-            const movieItem = document.createElement("div");
-            movieItem.classList.add("movie-item");
-
-            movieItem.innerHTML = `
-                <a href="movie.html?title=${movieSlug}">
-                    <img src="${movie.poster_url}" alt="${movie.title}">
-                </a>
-                <h3>${movie.title} (${movie.year})</h3>
-                <p>${movie.category}</p>
-            `;
-
-            movieList.appendChild(movieItem);
-        });
+    if (!movies || movies.length === 0) {
+        movieList.innerHTML = "<p>No movies found.</p>";
+        return;
     }
+
+    movies.forEach((movie) => {
+        const movieSlug = movie.title.replace(/\s+/g, '-').toLowerCase();
+        const movieItem = document.createElement("div");
+        movieItem.classList.add("movie-item");
+
+        movieItem.innerHTML = `
+            <a href="movie.html?title=${movieSlug}">
+                <img src="${movie.poster_url}" alt="${movie.title}">
+            </a>
+            <h3>${movie.title} (${movie.year})</h3>
+            <p>${movie.category}</p>
+        `;
+
+        movieList.appendChild(movieItem);
+    });
+}
+
 
     // Load movies when page loads
     document.addEventListener("DOMContentLoaded", async () => {
