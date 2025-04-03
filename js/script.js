@@ -1,97 +1,46 @@
-// ✅ Ensure Supabase SDK is loaded before using it
-document.addEventListener("DOMContentLoaded", async () => {
-    // ✅ Initialize Supabase properly
-    const supabaseUrl = "https://riwgagiilkmudczczfuw.supabase.co";
-    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd2dhZ2lpbGttdWRjemN6ZnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1NjYwODksImV4cCI6MjA1OTE0MjA4OX0.0_lciZODhjlzF_tSCLX7egMVodXhDTDU7jK6TphuQUk"; // Replace this with your actual key
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = "https://riwgagiilkmudczczfuw.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpd2dhZ2lpbGttdWRjemN6ZnV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM1NjYwODksImV4cCI6MjA1OTE0MjA4OX0.0_lciZODhjlzF_tSCLX7egMVodXhDTDU7jK6TphuQUk";
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    console.log("✅ Supabase Initialized:", supabase);
+async function fetchMovies(category = "all") {
+    let query = supabase.from("movies").select("*").order("id", { ascending: false });
 
-    let currentPage = 1;
-    const moviesPerPage = 10;
-
-    // 🔹 Fetch Movies Function
-    async function fetchMovies(page = 1) {
-        const start = (page - 1) * moviesPerPage;
-        const end = start + moviesPerPage - 1;
-
-        let { data, error } = await supabase
-            .from("movies")
-            .select("*")
-            .order("id", { ascending: false })
-            .range(start, end);
-
-        if (error) {
-            console.error("❌ Error fetching movies:", error);
-            return;
-        }
-
-        console.log("🎬 Movies fetched:", data);
-        displayMovies(data);
+    if (category !== "all") {
+        query = query.eq("category", category);
     }
 
-    // 🔹 Search Movies Function
-    async function searchMovies() {
-        const query = document.getElementById("searchInput").value.toLowerCase();
-
-        if (!query) {
-            fetchMovies(currentPage);
-            return;
-        }
-
-        let { data, error } = await supabase
-            .from("movies")
-            .select("*")
-            .ilike("title", `%${query}%`);
-
-        if (error) {
-            console.error("❌ Search error:", error);
-            return;
-        }
-
-        displayMovies(data);
+    const { data, error } = await query;
+    if (error) {
+        console.error("Error fetching movies:", error);
+        return;
     }
+    displayMovies(data);
+}
 
-    // 🔹 Display Movies in Movie List
-    function displayMovies(movies) {
-        const movieList = document.getElementById("movie-list");
-        movieList.innerHTML = "";
+function displayMovies(movies) {
+    const movieList = document.getElementById("movieList");
+    movieList.innerHTML = "";
+    movies.forEach(movie => {
+        const movieDiv = document.createElement("div");
+        movieDiv.classList.add("movie");
+        movieDiv.textContent = movie.title;
+        movieDiv.onclick = () => {
+            window.location.href = `movie.html?id=${movie.id}`;
+        };
+        movieList.appendChild(movieDiv);
+    });
+}
 
-        if (!movies || movies.length === 0) {
-            movieList.innerHTML = "<p>No movies found.</p>";
-            return;
-        }
-
-        movies.forEach(movie => {
-            const movieSlug = movie.title.trim().replace(/\s+/g, '-').toLowerCase();
-            const movieItem = document.createElement("div");
-            movieItem.classList.add("movie-item");
-
-            movieItem.innerHTML = `
-                <a href="movie.html?title=${movieSlug}">
-                    <img src="${movie.poster}" alt="${movie.title}">
-                </a>
-                <h3>${movie.title} (${movie.year})</h3>
-                <p>${movie.genre}</p>
-            `;
-
-            movieList.appendChild(movieItem);
-        });
-    }
-
-    // 🔹 Pagination Controls
-    document.getElementById("prevPage").addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            fetchMovies(currentPage);
+function searchMovies() {
+    let query = document.getElementById('search').value.toLowerCase();
+    let movies = document.querySelectorAll('.movie');
+    movies.forEach(movie => {
+        if (movie.textContent.toLowerCase().includes(query)) {
+            movie.style.display = 'block';
+        } else {
+            movie.style.display = 'none';
         }
     });
+}
 
-    document.getElementById("nextPage").addEventListener("click", () => {
-        currentPage++;
-        fetchMovies(currentPage);
-    });
-
-    // 🔹 Load Movies When Page Loads
-    fetchMovies(currentPage);
-});
+fetchMovies();
