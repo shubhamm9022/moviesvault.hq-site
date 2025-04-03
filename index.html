@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Vault</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script defer src="../js/script.js"></script>
+</head>
+<body>
+    <header>
+        <img src="../public/logo.png" alt="Movie Vault Logo" class="logo">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search movies..." oninput="searchMovies()">
+            <button onclick="searchMovies()">Search</button>
+        </div>
+    </header>
+
+    <div class="categories">
+        <div class="category-box">Hollywood</div>
+        <div class="category-box">Bollywood</div>
+        <div class="category-box">South Indian Dubbed</div>
+        <div class="category-box">Join Telegram</div>
+    </div>
+
+    <div class="notice-box">
+        <p>⚠ Important Notices Will Appear Here</p>
+    </div>
+
+    <section id="movie-list"></section>
+
+    <div class="pagination">
+        <button id="prevPage">Previous</button>
+        <button id="nextPage">Next</button>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Movie Vault. All Rights Reserved.</p>
+        <nav>
+            <a href="dmca.html">DMCA</a>
+            <a href="request.html">Request</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </footer>
+</body>
+</html>
