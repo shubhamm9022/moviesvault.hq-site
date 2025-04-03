@@ -20,32 +20,36 @@ async function fetchMovieDetails() {
     console.log("Fetching movie:", movieTitle); // Debugging log
 
     // Fetch movie details
-    const { data, error } = await supabase
-        .from("movies")
-        .select("*")
-        .ilike("title", movieTitle) // Use ilike() for case-insensitive search
-        .maybeSingle(); // Use maybeSingle() to handle empty results
+   async function fetchMovieDetails() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieSlug = urlParams.get("slug");
 
-    if (error) {
-        console.error("Error fetching movie:", error);
-        document.getElementById("movie-details").innerHTML = "<p>Error loading movie.</p>";
+    if (!movieSlug) {
+        document.getElementById("movie-details").innerHTML = "<p>Invalid movie.</p>";
         return;
     }
 
-    if (!data) {
+    const { data, error } = await supabase
+        .from("movies")
+        .select("*")
+        .eq("slug", movieSlug)
+        .single();
+
+    if (error || !data) {
         document.getElementById("movie-details").innerHTML = "<p>Movie not found.</p>";
         return;
     }
 
-    // Render movie details
     document.getElementById("movie-details").innerHTML = `
         <h1>${data.title} (${data.year})</h1>
-        <img src="${data.poster_url}" alt="${data.title}">
+        <img src="${data.poster}" alt="${data.title}">
         <p>${data.description}</p>
-        <a href="${data.stream_link}" target="_blank"><button>Stream</button></a>
-        <a href="${data.download_link}" target="_blank"><button>Download</button></a>
+        <a href="${data.streamLink}" target="_blank"><button>Stream</button></a>
+        <a href="${data.downloadLink}" target="_blank"><button>Download</button></a>
     `;
 }
 
-// Load movie details when page loads
+// Load movie details when the page loads
 document.addEventListener("DOMContentLoaded", fetchMovieDetails);
+
+ 
